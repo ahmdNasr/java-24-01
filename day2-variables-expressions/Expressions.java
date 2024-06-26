@@ -2,9 +2,9 @@
 // Expression = Ausdruck
 public class Expressions {
     public static void main(String[] args) {
-        int f = (3 * 4) - 1;
-        int d = (39 - 2) % 49;
-        boolean result = !(f < d && false);
+        int f = (3 * 4) - 1; // 11
+        int d = (39 - 2) % 49; // 37
+        boolean result = !(f < d && false); // true
         System.out.println(result);
     }
 
