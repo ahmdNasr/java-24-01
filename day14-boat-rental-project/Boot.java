@@ -59,7 +59,7 @@ public class Boot {
         if(!licenceOK) throw new IllegalStateException("Licence required to book this boat");
 
         // check availability based on from and to values!!!
-        boolean isAvailable = checkAvailability(from, to);
+        boolean isAvailable = checkIsAvailable(from, to);
         if(!isAvailable) throw new IllegalStateException("Boat not available, please try a different time");
         
         Reservation reservation = new Reservation(p, from, to);
@@ -67,7 +67,9 @@ public class Boot {
         return reservation;
     }
  
-    private boolean checkAvailability(LocalDateTime from, LocalDateTime to) {
+    private boolean checkIsAvailable(LocalDateTime from, LocalDateTime to) {
+        // if can find a reservation that overlaps --> return false
+        // else return true
         return true; // Not implemented yet!
     }
 }
