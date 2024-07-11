@@ -1,4 +1,5 @@
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Reservation {
     private Person person;
@@ -19,5 +20,14 @@ public class Reservation {
     }
     public LocalDateTime getTo() {
         return to;
+    }
+
+    @Override
+    public String toString() {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("EEE dd.MMM HH:mm");
+        return "From " + this.getFrom().format(format) +
+            " | To " + this.getTo().format(format) + 
+            " | By " + this.getPerson().getName() + " (Licence: " + this.getPerson().hasLicence() + ")";
+            
     }
 }

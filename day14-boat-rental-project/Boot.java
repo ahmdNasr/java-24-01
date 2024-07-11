@@ -23,7 +23,7 @@ public class Boot {
     }
 
     public void setType(String type) {
-        if(type != "Segelboot" || type != "Motorboot") throw new IllegalArgumentException("Bootstyp muss Segelboot oder Motorboot sein");
+        if(!type.equals("Segelboot") && !type.equals("Motorboot")) throw new IllegalArgumentException("Bootstyp muss Segelboot oder Motorboot sein");
         this.type = type;
     }
     public void setPersonCount(int personCount) {
@@ -70,6 +70,20 @@ public class Boot {
     private boolean checkIsAvailable(LocalDateTime from, LocalDateTime to) {
         // if can find a reservation that overlaps --> return false
         // else return true
-        return true; // Not implemented yet!
+        for(int i = 0; i < reservations.size(); i++) {
+            Reservation reservation = reservations.get(i);
+            boolean isOverlapping =
+                to.isAfter(reservation.getFrom()) && 
+                from.isBefore(reservation.getTo());
+            if(isOverlapping) return false;
+        }
+        return true;
+    }
+
+    public void printReservations(){
+        System.out.println("Reservations of " + this.getType());
+        for (Reservation r : reservations) {
+            System.out.println("\t" + r.toString());
+        }
     }
 }
