@@ -1,4 +1,7 @@
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -7,17 +10,23 @@ import java.time.ZoneOffset;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestInstance(Lifecycle.PER_CLASS)
 class ShopTest {
 
     private Shop shop;
+    private Customer kazim;
+    private Customer anna;
 
     @BeforeAll
     void setup() {
         shop = new Shop();
 
-        Customer c1 = new Customer("Kazim", "Sakip", "k.s@gmail.com", Instant.now());
-        Customer c2 = new Customer("Viktor", "Steiner", "viktors@gmail.com", Instant.now());
-        Customer c3 = new Customer("Anna", "Patschen", "annapatschen@gmail.com", Instant.now());
+        LocalDateTime kursbeginn = LocalDateTime.of(2024, Month.MAY, 21, 8, 45);
+        Instant kursbeginnInstant = kursbeginn.toInstant(ZoneOffset.UTC);
+
+        kazim = new Customer("Kazim", "Sakip", "k.s@gmail.com", Instant.now());
+        Customer c2 = new Customer("Viktor", "Steiner", "viktors@gmail.com", kursbeginnInstant);
+        anna = new Customer("Anna", "Patschen", "annapatschen@gmail.com", Instant.now());
 
         Product uhr = new Product("Uhr", "hilft dabei die Zeit zu lesen", 150.0f, "U139030");
         Product rolex = new Product("Rolex Uhr", "hilft dabei die Zeit zu lesen", 18000.0f, "U144430");
@@ -27,14 +36,14 @@ class ShopTest {
         Product keyboard = new Product("Keyboard", "Keyboard mit vielen Tasten", 100.0f, "K239340e");
         Product perfume = new Product("Perfume", "Riecht echt gut hmmmn (100ml)", 100.0f, "P239340e");
 
-        Order o1 = new Order(c1);
-        Order o2 = new Order(c1);
-        Order o3 = new Order(c1);
+        Order o1 = new Order(kazim);
+        Order o2 = new Order(kazim);
+        Order o3 = new Order(kazim);
 
         Order o4 = new Order(c2);
 
-        Order o5 = new Order(c3);
-        Order o6 = new Order(c3);
+        Order o5 = new Order(anna);
+        Order o6 = new Order(anna);
 
         o1.addProduct(uhr, 1);
         o1.addProduct(rolex, 1);
@@ -56,12 +65,11 @@ class ShopTest {
         o4.addProduct(monitor, 12);
         o4.addProduct(keyboard, 12);
         o4.setHasPaid(true);
-        LocalDateTime kursbeginn = LocalDateTime.of(2024, Month.MAY, 21, 8, 45);
-        o4.setOrderDate(kursbeginn.toInstant(ZoneOffset.UTC));
+        o4.setOrderDate(kursbeginnInstant);
         shop.addOrder(o4);
 
         o5.addProduct(perfume, 1);
-        o5.addProduct(rolex, 1);
+        o5.addProduct(rolex, 2);
         o5.setHasPaid(true);
         o5.setOrderDate(Instant.now());
         shop.addOrder(o5);
@@ -71,5 +79,29 @@ class ShopTest {
         o6.setOrderDate(Instant.now());
         shop.addOrder(o6);
     }
+
+    @Test
+    void totalOrderValue() {
+        assertEquals(18154.98f, shop.getOrderList().get(0).totalOrderValue());
+    }
+
+    @Test
+    void customerWithMostOrders() {
+        assertEquals(kazim, shop.customerWithMostOrder());
+    }
+
+
+    @Test
+    void customerWithHighestLifetimeValue() {
+        assertEquals(anna, shop.customerWithHighestLifetimeValue());
+    }
+
+    // Welcher Kunde ist am längsten Dabei ?
+    // Was ist das beliebteste Produkt ?
+    // Was ist das unbeliebteste Produkt ?
+
+    // Welcher Kunde hat den größten Umsatz gebracht ? AUFGABE
+
+    // Was ist der durschnittliche Wert einer Bestellung ?
 
 }

@@ -14,6 +14,14 @@ public class Order {
         this.products = new HashMap<>();
     }
 
+    public float totalOrderValue() {
+        return (float) products
+                .entrySet()
+                .stream()
+                .mapToDouble((e) -> e.getKey().getPrice() * e.getValue())
+                .sum();
+    }
+
     public Product addProduct(Product product, int quantity) {
         if(!products.containsKey(product)) products.put(product, 0);
         Integer productQuantity = products.get(product);
@@ -30,6 +38,7 @@ public class Order {
         products.remove(product);
         return product;
     }
+
 
     public Customer getCustomer() {
         return customer;
