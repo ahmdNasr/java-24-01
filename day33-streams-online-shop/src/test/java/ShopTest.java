@@ -16,6 +16,8 @@ class ShopTest {
     private Shop shop;
     private Customer kazim;
     private Customer anna;
+    private Product pinzette;
+    private Product rolex;
 
     @BeforeAll
     void setup() {
@@ -28,13 +30,13 @@ class ShopTest {
         Customer c2 = new Customer("Viktor", "Steiner", "viktors@gmail.com", kursbeginnInstant);
         anna = new Customer("Anna", "Patschen", "annapatschen@gmail.com", Instant.now());
 
-        Product uhr = new Product("Uhr", "hilft dabei die Zeit zu lesen", 150.0f, "U139030");
-        Product rolex = new Product("Rolex Uhr", "hilft dabei die Zeit zu lesen", 18000.0f, "U144430");
-        Product soundMachine = new Product("Sound Machine", "Macht viele geräusche auf Tastenklick", 9.0f, "SM239");
-        Product pinzette = new Product("Pinzette", "Pinzette mit integrierte LED", 2.49f, "P800");
-        Product monitor = new Product("Monitor Groß", "Monitor mit vielen kleinen Pixeln", 250.0f, "LG239340e");
-        Product keyboard = new Product("Keyboard", "Keyboard mit vielen Tasten", 100.0f, "K239340e");
-        Product perfume = new Product("Perfume", "Riecht echt gut hmmmn (100ml)", 100.0f, "P239340e");
+        Product uhr = new Product("Uhr", "hilft dabei die Zeit zu lesen", 150.0f, "U139030", Category.SCHMUCK);
+        rolex = new Product("Rolex Uhr", "hilft dabei die Zeit zu lesen", 18000.0f, "U144430", Category.SCHMUCK);
+        Product soundMachine = new Product("Sound Machine", "Macht viele geräusche auf Tastenklick", 9.0f, "SM239", Category.TECH);
+        pinzette = new Product("Pinzette", "Pinzette mit integrierte LED", 2.49f, "P800", Category.KOSMETIK);
+        Product monitor = new Product("Monitor Groß", "Monitor mit vielen kleinen Pixeln", 250.0f, "LG239340e", Category.TECH);
+        Product keyboard = new Product("Keyboard", "Keyboard mit vielen Tasten", 100.0f, "K239340e", Category.TECH);
+        Product perfume = new Product("Perfume", "Riecht echt gut hmmmn (100ml)", 100.0f, "P239340e", Category.KOSMETIK);
 
         Order o1 = new Order(kazim);
         Order o2 = new Order(kazim);
@@ -69,6 +71,7 @@ class ShopTest {
         shop.addOrder(o4);
 
         o5.addProduct(perfume, 1);
+        o5.addProduct(pinzette, 2);
         o5.addProduct(rolex, 2);
         o5.setHasPaid(true);
         o5.setOrderDate(Instant.now());
@@ -96,12 +99,30 @@ class ShopTest {
         assertEquals(anna, shop.customerWithHighestLifetimeValue());
     }
 
-    // Welcher Kunde ist am längsten Dabei ?
-    // Was ist das beliebteste Produkt ?
-    // Was ist das unbeliebteste Produkt ?
+    @Test
+    void topCustomerByProductPinzetteIsAnna() {
+        assertEquals(anna, shop.topCustomerPerProduct(pinzette));
+    }
+    @Test
+    void topCustomerByProductRolexIsKazim() {
+        assertEquals(anna, shop.topCustomerPerProduct(rolex));
+    }
 
-    // Welcher Kunde hat den größten Umsatz gebracht ? AUFGABE
+    @Test
+    void topCategoryByRevenue() {
+        assertEquals(Category.SCHMUCK, shop.topCategoryByRevenue());
+    }
 
-    // Was ist der durschnittliche Wert einer Bestellung ?
+    @Test
+    void returningCustomerRate() {
+        assertEquals(2.0/3.0, shop.returningCustomerRate());
+    }
 
+    // Was ist der durschnittliche Wert einer Bestellung in einem gegebnen Zeitraum ?
+    // Was ist der gesamte Shopumsatz in einem gegebene Zeitraum ?
+    // Wieviel % der Kunden haben mehrmals gekauf "returning customer rate"
+    // Durschnittliche Anzahl von Produkten pro Bestellung
+    // Produkt dass am Meisten von unterschiedlichen Kunden bestellt wurde...
+
+    // Umsatzstärkster Tag...
 }

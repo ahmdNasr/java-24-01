@@ -48,4 +48,12 @@ public class Customer {
         if(customerSince == null) throw new IllegalArgumentException("CustomerSince must be set");
         this.customerSince = customerSince;
     }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                '}';
+    }
 }

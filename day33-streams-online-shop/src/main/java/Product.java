@@ -1,14 +1,18 @@
+
+
 public class Product {
     private String name;
     private String description;
     private float price;
     private String articleNr;
+    private Category category;
 
-    public Product(String name, String description, float price, String articleNr) {
+    public Product(String name, String description, float price, String articleNr, Category category) {
         this.setName(name);
         this.setDescription(description);
         this.setPrice(price);
         this.setArticleNr(articleNr);
+        this.category = category;
     }
 
     public String getName() {
@@ -45,6 +49,10 @@ public class Product {
     public void setArticleNr(String articleNr) {
         if(articleNr == null || articleNr.trim().length() == 0) throw new IllegalArgumentException("ArticleNumber must be set");
         this.articleNr = articleNr;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 
     @Override

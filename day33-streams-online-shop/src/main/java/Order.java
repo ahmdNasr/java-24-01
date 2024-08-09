@@ -39,6 +39,10 @@ public class Order {
         return product;
     }
 
+    public Map<Product, Integer> getProducts() {
+        return products;
+    }
+
 
     public Customer getCustomer() {
         return customer;
