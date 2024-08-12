@@ -1,6 +1,7 @@
 import javax.crypto.Cipher;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class Shop {
@@ -22,6 +23,49 @@ public class Shop {
 
     public List<Order> getOrderList() {
         return orderList;
+    }
+
+    public Product productOrderedByMostCustomers() {
+        return orderList
+                .stream()
+                .flatMap(order -> order
+                        .getProducts()
+                        .keySet().stream()
+                        .map(product -> new AbstractMap.SimpleEntry<Product, Customer>(
+                                    product,
+                                    order.getCustomer()
+                        ))
+                ) // Stream-Input: SimpleEntry<Product, Customer> --> Map<Product, Set<Customer>>
+                // <key = value> in SimpleEntry
+
+                // <rolex=kazim>  -> kazim -> Kazim -> KAZIM
+                // <rolex=viktor> -> viktor
+                // <rolex=anna>   -> anna
+//                                                    ---> toSet
+                // <monitor=hugo> -> hugo
+                // <monitor=hugo> -> hugo
+
+                // Output:
+                // [[
+                //      rolex -> { kazim, viktor }
+                //      monitor -> { hugo }
+                // ]]
+
+                .collect(Collectors.groupingBy(
+                        Map.Entry::getKey,
+                        // downstream SimpleEntry<Product, Customer>
+                        Collectors.mapping(
+                                Map.Entry::getValue, // Customer
+                                        Collectors.collectingAndThen(Collectors.toSet(), Set::size))))
+//                .collect(Collectors.groupingBy(
+//                        Map.Entry::getKey,
+//                        Collectors.mapping(Map.Entry::getValue, Collectors.toSet()) // toSet, damit Kunden die öfter ein Produkt bestellen nur 1 mal gezählt werden
+//                ))
+                .entrySet().stream()
+                .peek(System.out::println)
+                .max(Map.Entry.comparingByValue()) // Map.Entry::getValue ==> Funktionsreferenz
+                .map(Map.Entry::getKey)
+                .orElse(null);
     }
 
     public double returningCustomerRateMorePerformant() {

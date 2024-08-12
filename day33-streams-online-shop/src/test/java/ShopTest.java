@@ -66,6 +66,7 @@ class ShopTest {
 
         o4.addProduct(monitor, 12);
         o4.addProduct(keyboard, 12);
+        o4.addProduct(pinzette, 1);
         o4.setHasPaid(true);
         o4.setOrderDate(kursbeginnInstant);
         shop.addOrder(o4);
@@ -116,6 +117,11 @@ class ShopTest {
     @Test
     void returningCustomerRate() {
         assertEquals(2.0/3.0, shop.returningCustomerRate());
+    }
+
+    @Test
+    void productOrderedByMostCustomers() {
+        assertEquals(pinzette, shop.productOrderedByMostCustomers());
     }
 
     // Was ist der durschnittliche Wert einer Bestellung in einem gegebnen Zeitraum ?

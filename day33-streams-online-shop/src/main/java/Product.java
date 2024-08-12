@@ -1,4 +1,6 @@
-
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Product {
     private String name;
@@ -6,6 +8,25 @@ public class Product {
     private float price;
     private String articleNr;
     private Category category;
+
+    // Example: produts.csv
+    // Content
+    // name,description,price,articleNr,category
+    // Rolex,Rolex uhr,18000.0,R393,SCHMUCK
+    // Pinzette,pinzette zum haare zupfen,5.29,P478,KOSMETIK
+    // Monitor,monitor um ein bild zu sehen,120.0,M478,TECH
+    // MILCH,was trinkt die kuh? wasser,1.69,MILCH1,ESSEN
+    public static List<Product> parseProductListCsv(String csv) {
+        String[] lines = csv.split("\n");
+        return Arrays
+                .stream(lines)
+                .skip(1)
+                .map(line -> {
+                    String[] data = line.split(",");
+                    if(data.length < 5) throw new IllegalArgumentException("CSV row " + line + " has missing data");
+                    return new Product(data[0], data[1], Float.parseFloat(data[2]), data[3], Category.valueOf(data[4]));
+                }).collect(Collectors.toList());
+    }
 
     public Product(String name, String description, float price, String articleNr, Category category) {
         this.setName(name);
